@@ -2,8 +2,8 @@ import React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-
 import "../globals.css";
+import { ToastProvider } from "@/providers/ToastProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +21,10 @@ export default function RootLayout({
     <ClerkProvider
     >
       <html lang='en'>
-        <body className={`${inter.className} bg-dark-1 flex items-center justify-center mt-24`}>{children}</body>
+        <body className={`${inter.className} bg-dark-1 flex items-center justify-center mt-24`}>
+          <ToastProvider/>
+          {children}
+          </body>
       </html>
     </ClerkProvider>
   );
