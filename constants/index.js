@@ -32,8 +32,8 @@ export const sideBarLinks = [
 ];
 
 export const profileTabs = [
-  { value: "threads", label: "Threads", icon: "/assets/assets/reply.svg" },
-  { value: "replies", label: "Replies", icon: "/assets/assets/members.svg" },
+  { value: "threads", label: "Bài Viết", icon: "/assets/assets/reply.svg" },
+  { value: "replies", label: "Trả lời", icon: "/assets/assets/members.svg" },
   { value: "tagged", label: "Tagged", icon: "/assets/assets/tag.svg" },
 ];
 
