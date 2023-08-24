@@ -8,6 +8,7 @@ import User from "../models/user.model";
 
 interface CreateThreadProps {
   text: string;
+  image: string;
   author: string;
   communityId: string | null;
   path: string;
@@ -15,14 +16,16 @@ interface CreateThreadProps {
 
 export async function createThread({
   text,
+  image,
   author,
   communityId,
   path,
-}: CreateThreadProps) {
+}: CreateThreadProps)  {
   try {
     await connectToDB();
     const createdThread = await Thread.create({
       text,
+      image,
       author,
       communityId: null,
     });
@@ -46,7 +49,7 @@ export async function fetchThreads(pageNumber = 1, pageSize = 20) {
   const skipAmount = (pageNumber - 1) * pageSize;
 
   const threadQuery = Thread.find({ parentId: { $in: [null, undefined] } })
-    .sort({ createAt: "desc" })
+    .sort({ createdAt: "desc" })
     .skip(skipAmount)
     .limit(pageSize)
     .populate({ path: "author", model: User })

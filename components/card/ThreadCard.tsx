@@ -1,10 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
+import { formatDateString } from "@/lib/utils";
 interface ThreadCardProps {
   id: string;
   currentUserId: string;
   parentId: string | null;
   content: string;
+  image?: string;
   author: {
     name: string;
     image: string;
@@ -26,6 +28,7 @@ interface ThreadCardProps {
 const ThreadCard: React.FC<ThreadCardProps> = ({
   id,
   currentUserId,
+  image,
   parentId,
   content,
   author,
@@ -62,6 +65,12 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
               </h4>
             </Link>
             <p className="mt-2 text-small-regular text-light-2">{content}</p>
+            {image && (
+              <div className="text-light-1 mt-5 w-full h-[50vh] relative">
+                <Image src={image} alt="tsst" fill className="rounded-md" />
+              </div>
+            )}
+
             <div
               className={`${
                 isComment && "mb-10"
@@ -70,16 +79,16 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
               <div className="flex gap-3.5">
                 <Image
                   src="/assets/assets/heart-gray.svg"
-                  width={24}
-                  height={24}
+                  width={34}
+                  height={34}
                   alt="icon"
                   className="cursor-pointer object-contain hover:scale-105"
                 />
                 <Link href={`/thread/${id}`}>
                   <Image
                     src="/assets/assets/reply.svg"
-                    width={24}
-                    height={24}
+                    width={34}
+                    height={34}
                     alt="icon"
                     className="cursor-pointer object-contain hover:scale-105"
                   />
@@ -87,28 +96,50 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
 
                 <Image
                   src="/assets/assets/repost.svg"
-                  width={24}
-                  height={24}
+                  width={34}
+                  height={34}
                   alt="icon"
                   className="cursor-pointer object-contain hover:scale-105"
                 />
                 <Image
                   src="/assets/assets/share.svg"
-                  width={24}
-                  height={24}
+                  width={34}
+                  height={34}
                   alt="icon"
                   className="cursor-pointer object-contain hover:scale-105"
                 />
               </div>
               {isComment && comments.length > 0 && (
-                <Link href={`/thread/${id}`}>
-                  <p className="mt-1 text-subtle-medium text-gray-1">
-                    {comments.length} repl{comments.length > 1 ? "ies" : "y"}
-                  </p>
-                </Link>
+                <div className="flex items-center mt-3 ml-1 gap-2">
+                  {comments.slice(0, 2).map((comments, index) => (
+                    <Image
+                      key={index}
+                      src={comments.author.image}
+                      alt={`user_${index}`}
+                      width={34}
+                      height={34}
+                      className={` ${
+                        index != 0 && "-ml-5"
+                      } rounded-full object-cover`}
+                    />
+                  ))}
+
+                  <Link href={`/thread/${id}`}>
+                    <p className="mt-1 text-subtle-medium text-gray-1">
+                      {comments.length} repl{comments.length > 1 ? "ies" : "y"}
+                    </p>
+                  </Link>
+                </div>
               )}
             </div>
           </div>
+        </div>
+        <div className="">
+          {
+            <p className="text-subtle-medium text-gray-1">
+              {formatDateString(createdAt)}
+            </p>
+          }
         </div>
       </div>
     </article>

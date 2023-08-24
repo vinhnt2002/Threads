@@ -17,7 +17,7 @@ export const sideBarLinks = [
   {
     imgURL: "/assets/assets/create.svg",
     route: "/create-thread",
-    label: "Tạo Thread",
+    label: "Tạo Bài Viết",
   },
   {
     imgURL: "/assets/assets/community.svg",
@@ -27,7 +27,7 @@ export const sideBarLinks = [
   {
     imgURL: "/assets/assets/user.svg",
     route: "/profile",
-    label: "Profile",
+    label: "Thông tin cá nhân",
   },
 ];
 

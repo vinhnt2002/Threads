@@ -5,6 +5,7 @@ const ThreadSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  image: String,
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

@@ -61,7 +61,7 @@ const Comment: React.FC<CommentProps> = ({
           control={form.control}
           name="thread"
           render={({ field }) => (
-            <FormItem className="flex w-full flex-col gap-3">
+            <FormItem className="flex w-full items-center gap-3">
               <FormLabel>
                 <Image
                   src={currentUserImg}
@@ -83,7 +83,7 @@ const Comment: React.FC<CommentProps> = ({
           )}
         />
 
-        <Button type="submit" className="comment-form_btn md:mt-14">
+        <Button type="submit" className="comment-form_btn ">
           Reply
         </Button>
       </form>

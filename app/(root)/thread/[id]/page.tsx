@@ -6,7 +6,7 @@ import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 const page = async ({ params }: { params: { id: string } }) => {
-  // console.log(params);
+  console.log(params);
   if (!params.id) return null;
 
   const user = await currentUser();

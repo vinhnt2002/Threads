@@ -13,7 +13,7 @@ const CreateThread = async () => {
   if (!userInfo?.onboarded) redirect("/onboarding");
   return (
     <>
-      <h1 className="head-text text-left">Create Thread</h1>
+      <h1 className="head-text text-left">Tạo bài viết</h1>
       <PostThread userId ={userInfo._id}/> 
     </>
   );
