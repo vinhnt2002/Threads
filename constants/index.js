@@ -17,7 +17,7 @@ export const sideBarLinks = [
   {
     imgURL: "/assets/assets/create.svg",
     route: "/create-thread",
-    label: "Tạo Thread",
+    label: "Tạo Bài Viết",
   },
   {
     imgURL: "/assets/assets/community.svg",
@@ -27,13 +27,13 @@ export const sideBarLinks = [
   {
     imgURL: "/assets/assets/user.svg",
     route: "/profile",
-    label: "Profile",
+    label: "Thông tin cá nhân",
   },
 ];
 
 export const profileTabs = [
-  { value: "threads", label: "Threads", icon: "/assets/assets/reply.svg" },
-  { value: "replies", label: "Replies", icon: "/assets/assets/members.svg" },
+  { value: "threads", label: "Bài Viết", icon: "/assets/assets/reply.svg" },
+  { value: "replies", label: "Trả lời", icon: "/assets/assets/members.svg" },
   { value: "tagged", label: "Tagged", icon: "/assets/assets/tag.svg" },
 ];
 
