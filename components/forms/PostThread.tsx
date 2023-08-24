@@ -26,6 +26,7 @@ import { ChangeEvent, useState } from "react";
 import { useUploadThing } from "@/lib/uploadthing";
 import { isBase64Image } from "@/lib/utils";
 import { Input } from "../ui/input";
+import { useOrganization } from "@clerk/nextjs";
 
 interface PostThreadProps {
   userId: string;
@@ -33,7 +34,7 @@ interface PostThreadProps {
 const PostThread: React.FC<PostThreadProps> = ({ userId }) => {
   const pathname = usePathname();
   const router = useRouter();
-
+  const {organization} = useOrganization();
   const { startUpload } = useUploadThing("media");
 
   const [files, setFiles] = useState<File[]>([]);
@@ -65,7 +66,7 @@ const PostThread: React.FC<PostThreadProps> = ({ userId }) => {
       image: values.thread_photo,
       author: userId,
       //TO DO COMUNITY LATER
-      communityId: null,
+      communityId: organization ? organization.id : null ,
       path: pathname,
     });
 

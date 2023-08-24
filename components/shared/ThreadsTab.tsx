@@ -1,6 +1,7 @@
 import { fetchUserPosts } from "@/lib/actions/user.action";
 import { redirect } from "next/navigation";
 import ThreadCard from "../card/ThreadCard";
+import { fetchCommunityPosts } from "@/lib/actions/community.action";
 
 interface Result {
   name: string;
@@ -42,7 +43,7 @@ const ThreadsTab: React.FC<ThreadsTabProps> = async ({
 }) => {
   let result: Result;
   if (accountType === "Community") {
-    result = await fetchUserPosts(accountId);
+    result = await fetchCommunityPosts(accountId);
   } else {
     result = await fetchUserPosts(accountId);
   }
@@ -71,7 +72,11 @@ const ThreadsTab: React.FC<ThreadsTabProps> = async ({
                   id: thread.author.id,
                 }
           }
-          community={thread.community}
+          community={
+            accountType === "Community"
+              ? { name: result.name, id: result.id, image: result.image }
+              : thread.community
+          }
           createdAt={thread.createdAt}
           comments={thread.children}
         />
