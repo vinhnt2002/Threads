@@ -107,7 +107,7 @@ interface fetchCommunitiesProps {
 // fetch and search
 export async function fetchCommunities({
   searchString = "",
-  pageSize = 20,
+  pageSize = 6,
   pageNumber = 1,
   sortBy = "desc",
 }: fetchCommunitiesProps) {

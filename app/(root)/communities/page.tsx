@@ -1,4 +1,5 @@
 import CommunityCard from "@/components/card/CommunityCard";
+import Pagination from "@/components/shared/Pagination";
 import SearchBar from "@/components/shared/SearchBar";
 import { fetchCommunities } from "@/lib/actions/community.action";
 import { fetchUser } from "@/lib/actions/user.action";
@@ -18,8 +19,8 @@ const page = async ({
   
   const result = await fetchCommunities({
     searchString: searchParams.q,
+    pageSize: 6,
     pageNumber: searchParams?.page ? +searchParams.page : 1,
-    pageSize: 25,
   })
   
   return (
@@ -50,11 +51,11 @@ const page = async ({
       )}
     </section>
 
-    {/* <Pagination
+    <Pagination
       path='communities'
       pageNumber={searchParams?.page ? +searchParams.page : 1}
       isNext={result.isNext}
-    /> */}
+    />
   </>
   )
 

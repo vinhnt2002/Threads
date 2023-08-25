@@ -5,6 +5,7 @@ import { connectToDB } from "../mongoose";
 
 import Thread from "../models/thread.model";
 import User from "../models/user.model";
+import Community from "../models/community.model";
 
 interface CreateThreadProps {
   text: string;
@@ -20,14 +21,20 @@ export async function createThread({
   author,
   communityId,
   path,
-}: CreateThreadProps)  {
+}: CreateThreadProps) {
   try {
     await connectToDB();
+
+    const communityIdObject = await Community.findOne(
+      { id: communityId },
+      { _id: 1 }
+    );
+
     const createdThread = await Thread.create({
       text,
       image,
       author,
-      communityId: null,
+      communityId: communityIdObject,
     });
 
     // update User Model to take the ObjectId of Thread
@@ -53,6 +60,10 @@ export async function fetchThreads(pageNumber = 1, pageSize = 20) {
     .skip(skipAmount)
     .limit(pageSize)
     .populate({ path: "author", model: User })
+    .populate({
+      path: "community",
+      model: Community,
+    })
     .populate({
       path: "children",
       populate: {
@@ -82,6 +93,10 @@ export async function fetchThreadById(threadId: string) {
         path: "author",
         model: User,
         select: "_id id name image",
+      })
+      .populate({
+        path: "community",
+        model: Community,
       })
       .populate({
         path: "children",
@@ -141,5 +156,90 @@ export async function addCommentToThread(
     revalidatePath(path);
   } catch (error: any) {
     throw new Error("Fail to Create Thread", error.message);
+  }
+}
+
+
+
+// DECENDANTS : Hậu duệ, con cháu
+async function fetchAllChildThreads(threadId: string): Promise<any[]> {
+  const childThreads = await Thread.find({ parentId: threadId });
+  const thread = await Thread.findById(threadId)
+  const descendantThreads = [];
+  for (const childThread of childThreads) {
+    const descendants = await fetchAllChildThreads(childThread._id);
+    descendantThreads.push(childThread, ...descendants);
+  }
+  console.log("here is children" + descendantThreads);
+  console.log("here is origional : " + thread.author._id.toString());
+  return descendantThreads;
+}
+
+export async function test(id: string) {
+  fetchAllChildThreads(id)
+}
+
+export async function deleteThreads(
+  id: string,
+  path: string
+): Promise<void> {
+  try {
+    await connectToDB();
+
+    const mainThread = await Thread.findById(id).populate(
+      "author community"
+    );
+
+
+    if (!mainThread) {
+      throw new Error("Thread no found");
+    }
+
+    // fetch all decentdant of child of thread with the function fetchAllChildThreads above
+    const descendantThreads = await fetchAllChildThreads(id);
+
+    // after take all decentdant . delete it hen @@
+
+    //step 1 take all thread id to delete many
+    const decentdantThreadsId = [
+      id,
+      ...descendantThreads.map((thread) => thread._id),
+    ];
+
+    // step 2 take all relation to with community and author and delete
+    // Extract the authorIds and communityIds to update User and Community models respectively
+    const uniqueAuthorIds = new Set(
+      [
+        ...descendantThreads.map((thread) => thread.author?._id?.toString()), // Use optional chaining to handle possible undefined values
+        mainThread.author?._id?.toString(),
+      ].filter((id) => id !== undefined)
+    );
+
+
+    const uniqueCommunityIds = new Set(
+      [
+        ...descendantThreads.map((thread) => thread.community?._id?.toString()), // Use optional chaining to handle possible undefined values
+        mainThread.community?._id?.toString(),
+      ].filter((id) => id !== undefined)
+    );
+
+    //delete
+    await Thread.deleteMany({ _id: { $in: decentdantThreadsId } });
+
+    //Update User again
+    await User.updateMany(
+      { _id: { $in: Array.from(uniqueAuthorIds) } },
+      { $pull: { threads: { $in: decentdantThreadsId } } }
+    );
+
+    // Update Community again
+    await Community.updateMany(
+      { _id: { $in: Array.from(uniqueCommunityIds) } },
+      { $pull: { threads: { $in: decentdantThreadsId } } }
+    );
+
+    revalidatePath(path);
+  } catch (error: any) {
+    throw new Error("fail to delete threads", error.message);
   }
 }

@@ -20,8 +20,8 @@ const Activity: React.FC<ActivityProps> = ({
   return (
     <div>
       <Link href={`/thread/${parentId}`}>
-        <article className="activity-card flex justify-between rounded-md">
-          <div className="flex flex-row gap-4 items-center">
+        <article className="activity-card flex flex-col md:flex-row justify-between rounded-md">
+          <div className="flex flex-row gap-4 items-start">
             <Image
               src={authorReplyImage}
               alt={authorReplyName}

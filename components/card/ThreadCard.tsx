@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { formatDateString } from "@/lib/utils";
+import DeleteThread from "../forms/DeleteThread";
 interface ThreadCardProps {
   id: string;
   currentUserId: string;
@@ -43,7 +44,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
         isComment ? "px-0 xs::p-7" : "bg-dark-2 p-7"
       }  `}
     >
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between gap-2">
         <div className="flex w-full flex-1 flex-row gap-4">
           {/* image  */}
           <div className="flex flex-col items-center">
@@ -59,17 +60,43 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
           </div>
           {/* info user   */}
           <div className="flex w-full flex-col ">
-            <Link href={`/profile/${author.id}`} className="w-fit">
-              <h4 className="cursor-pointer text-base-semibold text-light-1">
-                {author.name}
-              </h4>
-            </Link>
-            <p className="mt-2 text-small-regular text-light-2">{content}</p>
-            {image && (
-              <div className="text-light-1 mt-5 w-full h-[50vh] relative">
-                <Image src={image} alt="tsst" fill className="rounded-md" />
+            <div className="flex flex-col md:flex-row justify-between">
+              <div>
+                <Link href={`/profile/${author.id}`} className="w-fit">
+                  <h4 className="cursor-pointer text-base-semibold text-light-1">
+                    {author.name}
+                  </h4>
+                  {image && (
+                    <div className="text-light-1 mt-5 w-[200px] h-[30vh] md:w-[500px] md:h-[50vh] relative">
+                      <Image
+                        src={image}
+                        alt="tsst"
+                        fill
+                        className="rounded-md"
+                      />
+                    </div>
+                  )}
+                </Link>
+                <p className="mt-2  text-small-regular text-light-2">
+                  {content}
+                </p>
               </div>
-            )}
+
+              <div className="w-full flex justify-end mt-2 gap-2">
+                {
+                  <p className="text-subtle-semibold text-gray-1 p-0 md:p-1">
+                    {formatDateString(createdAt)}
+                  </p>
+                }
+                        <DeleteThread
+          threadId={JSON.stringify(id)}
+          currentUserId={currentUserId}
+          authorId={author.id}
+          parentId={parentId}
+          isComment={isComment}
+        />
+              </div>
+            </div>
 
             <div
               className={`${
@@ -133,16 +160,10 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
               )}
             </div>
           </div>
-        </div>
-        <div className="">
-          {
-            <p className="text-subtle-medium text-gray-1">
-              {formatDateString(createdAt)}
-            </p>
-          }
-        </div>
+
       </div>
-      
+        </div>
+
       {/* {!isComment && community && (
         <Link
           href={`/communities/${community.id}`}
