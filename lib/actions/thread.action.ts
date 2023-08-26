@@ -163,21 +163,19 @@ export async function addCommentToThread(
 
 // DECENDANTS : Hậu duệ, con cháu
 async function fetchAllChildThreads(threadId: string): Promise<any[]> {
+  
   const childThreads = await Thread.find({ parentId: threadId });
   const thread = await Thread.findById(threadId)
+  
   const descendantThreads = [];
   for (const childThread of childThreads) {
     const descendants = await fetchAllChildThreads(childThread._id);
     descendantThreads.push(childThread, ...descendants);
   }
-  console.log("here is children" + descendantThreads);
-  console.log("here is origional : " + thread.author._id.toString());
+
   return descendantThreads;
 }
 
-export async function test(id: string) {
-  fetchAllChildThreads(id)
-}
 
 export async function deleteThreads(
   id: string,
@@ -207,7 +205,6 @@ export async function deleteThreads(
     ];
 
     // step 2 take all relation to with community and author and delete
-    // Extract the authorIds and communityIds to update User and Community models respectively
     const uniqueAuthorIds = new Set(
       [
         ...descendantThreads.map((thread) => thread.author?._id?.toString()), // Use optional chaining to handle possible undefined values

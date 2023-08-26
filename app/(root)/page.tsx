@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { currentUser } from "@clerk/nextjs";
 import { fetchUser } from "@/lib/actions/user.action";
-import { fetchThreads, test } from "@/lib/actions/thread.action";
+import { fetchThreads } from "@/lib/actions/thread.action";
 import ThreadCard from "@/components/card/ThreadCard";
 
 export default async function Home() {
@@ -14,7 +14,6 @@ export default async function Home() {
 
   // fucntion to fetch posts thread
   const result = await fetchThreads(1,20);
-  const a = await test("64e8c05c8ca7fb8026a412a0")
   return (
     <>
       <h1 className="head-text text-left">Trang chủ</h1>

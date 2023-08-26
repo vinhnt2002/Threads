@@ -11,6 +11,7 @@ import Activity from "@/components/shared/Activity";
 const ProfilePage = async ({ params }: { params: { id: string } }) => {
   const user = await currentUser();
   if (!user) return null;
+  // console.log(params.id);
 
   const userInfo = await fetchUser(params.id);
   const activity = await getActivity(userInfo._id);
