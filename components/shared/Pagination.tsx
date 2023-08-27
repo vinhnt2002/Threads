@@ -5,15 +5,15 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 interface PaginationProps {
-  path: string;
   pageNumber: number;
   isNext: boolean;
+  path: string;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
-  path,
   pageNumber,
   isNext,
+  path,
 }) => {
   // console.log(path);
   // console.log(pageNumber);
@@ -33,27 +33,27 @@ const Pagination: React.FC<PaginationProps> = ({
     if (nextPageNumber > 1) {
       router.push(`/${path}?page=${nextPageNumber}`);
     } else {
-      router.push(`{path}`);
+      router.push(`${path}`);
     }
   };
+  
   if (!isNext && pageNumber === 1) return null;
-
   return (
-    <div className="pagination">
+    <div className='pagination'>
       <Button
         onClick={() => handlePagination("prev")}
         disabled={pageNumber === 1}
-        className="!text-small-regular text-light-2  hover:scale-110"
+        className='!text-small-regular text-light-2'
       >
-        prev
+        Prev
       </Button>
-      <p className="text-small-semibold text-light-1">{pageNumber}</p>
+      <p className='text-small-semibold text-light-1'>{pageNumber}</p>
       <Button
         onClick={() => handlePagination("next")}
-        disabled={pageNumber === 1}
-        className="!text-small-regular text-light-2 hover:scale-110"
+        disabled={!isNext}
+        className='!text-small-regular text-light-2'
       >
-        next
+        Next
       </Button>
     </div>
   );

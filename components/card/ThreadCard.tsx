@@ -61,7 +61,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
           {/* info user   */}
           <div className="flex w-full flex-col ">
             <div className="flex flex-col md:flex-row justify-between">
-              <div>
+              <div className="md:w-[70%] w-full ">
                 <Link href={`/profile/${author.id}`} className="w-fit">
                   <h4 className="cursor-pointer text-base-semibold text-light-1">
                     {author.name}
@@ -82,19 +82,19 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
                 </p>
               </div>
 
-              <div className="w-full flex justify-end mt-2 gap-2">
+              <div className="md:w-[30%] w-full flex justify-end mt-2 gap-2">
                 {
                   <p className="text-subtle-semibold text-gray-1 p-0 md:p-1">
                     {formatDateString(createdAt)}
                   </p>
                 }
-                        <DeleteThread
-          threadId={JSON.stringify(id)}
-          currentUserId={currentUserId}
-          authorId={author.id}
-          parentId={parentId}
-          isComment={isComment}
-        />
+                <DeleteThread
+                  threadId={JSON.stringify(id)}
+                  currentUserId={currentUserId}
+                  authorId={author.id}
+                  parentId={parentId}
+                  isComment={isComment}
+                />
               </div>
             </div>
 
@@ -160,11 +160,10 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
               )}
             </div>
           </div>
-
-      </div>
         </div>
+      </div>
 
-      {/* {!isComment && community && (
+      {!isComment && community && (
         <Link
           href={`/communities/${community.id}`}
           className="mt-5 flex items-center"
@@ -182,7 +181,27 @@ const ThreadCard: React.FC<ThreadCardProps> = ({
             className="ml-1 rounded-full object-cover"
           />
         </Link>
-      )} */}
+      )}
+
+      {!isComment && community && (
+        <Link
+          href={`/communities/${community.id}`}
+          className="mt-5 flex items-center"
+        >
+          <p className="text-subtle-medium text-gray-1">
+            {formatDateString(createdAt)}
+            {community && ` - ${community.name} Community`}
+          </p>
+
+          <Image
+            src={community.image}
+            alt={community.name}
+            width={14}
+            height={14}
+            className="ml-1 rounded-full object-cover"
+          />
+        </Link>
+      )}
     </article>
   );
 };

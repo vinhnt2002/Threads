@@ -69,8 +69,8 @@ export async function fetchUser(userId: string) {
 interface fetchUsersParams {
   userId: string;
   searchString?: string;
-  pageSize?: number;
   pageNumber?: number;
+  pageSize?: number;
   sortBy?: SortOrder;
 }
 
@@ -78,8 +78,8 @@ interface fetchUsersParams {
 export async function fetchUsers({
   userId,
   searchString = "",
-  pageSize = 20,
   pageNumber = 1,
+  pageSize = 20,
   sortBy = "desc",
 }: fetchUsersParams) {
   try {
@@ -124,6 +124,9 @@ export async function fetchUserPosts(userId: string) {
     const threads = await User.findOne({ id: userId }).populate({
       path: "threads",
       model: "Thread",
+      options:{
+        sort: {createdAt : -1}
+      },
       populate: [
         {
           path: "community",
@@ -143,7 +146,7 @@ export async function fetchUserPosts(userId: string) {
     });
 
     // console.log(threads);
-    return threads;
+    return threads ;
   } catch (error: any) {
     throw new Error("fail to fetchUserPosts ", error.message);
   }

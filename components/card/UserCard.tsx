@@ -19,7 +19,8 @@ const UserCard: React.FC<UserCardProps> = ({
   imgUrl,
   personType,
 }) => {
-    const router = useRouter();
+  const router = useRouter();
+  const isCommunity = personType === "Community";
   return (
     <article className="user-card">
       <div className="user-card_avatar">
@@ -36,10 +37,17 @@ const UserCard: React.FC<UserCardProps> = ({
           <p className="text-small-medium text-gray-1">@{username}</p>
         </div>
 
-        <Button className="user-card_btn" onClick={() =>{
-            router.push(`/profile/${id}`)
-        }}>
-                View
+        <Button
+          className="user-card_btn"
+          onClick={() => {
+            if (isCommunity) {
+              router.push(`communities/${id}`);
+            } else {
+              router.push(`/profile/${id}`);
+            }
+          }}
+        >
+          View
         </Button>
       </div>
     </article>

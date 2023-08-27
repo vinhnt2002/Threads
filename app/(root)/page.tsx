@@ -4,8 +4,13 @@ import { currentUser } from "@clerk/nextjs";
 import { fetchUser } from "@/lib/actions/user.action";
 import { fetchThreads } from "@/lib/actions/thread.action";
 import ThreadCard from "@/components/card/ThreadCard";
+import Pagination from "@/components/shared/Pagination";
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) {
   const user = await currentUser();
   if (!user) return null;
 
@@ -13,7 +18,10 @@ export default async function Home() {
   if (!userInfo?.onboarded) redirect("/onboarding");
 
   // fucntion to fetch posts thread
-  const result = await fetchThreads(1,20);
+  const result = await fetchThreads(
+    searchParams.page ? +searchParams.page : 1,
+    8
+  );
   return (
     <>
       <h1 className="head-text text-left">Trang chủ</h1>
@@ -23,22 +31,27 @@ export default async function Home() {
         ) : (
           <>
             {result.threads.map((thread) => (
-              <ThreadCard 
-              key={thread._id}
-              id={thread.id}
-              currentUserId= {user.id}
-              parentId ={thread.parentId}
-              image = {thread.image}
-              content= {thread.text}
-              author= {thread.author}
-              community = {thread.community}
-              createdAt = {thread.createdAt}
-              comments = {thread.children}
-              
+              <ThreadCard
+                key={thread._id}
+                id={thread.id}
+                currentUserId={user.id}
+                parentId={thread.parentId}
+                image={thread.image}
+                content={thread.text}
+                author={thread.author}
+                community={thread.community}
+                createdAt={thread.createdAt}
+                comments={thread.children}
               />
             ))}
           </>
         )}
+
+        <Pagination
+          path="/"
+          pageNumber={searchParams?.page ? +searchParams.page : 1}
+          isNext={result.isNext}
+        />
       </section>
     </>
   );

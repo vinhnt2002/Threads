@@ -5,7 +5,11 @@ import { fetchUser, fetchUsers } from "@/lib/actions/user.action";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
-const page = async ({searchParams} : {searchParams : {[key: string]: string | undefined}}) => {
+const page = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
   const user = await currentUser();
   if (!user) return null;
 
@@ -14,15 +18,15 @@ const page = async ({searchParams} : {searchParams : {[key: string]: string | un
 
   const allUser = await fetchUsers({
     userId: user.id,
-    searchString: searchParams.q, 
+    searchString: searchParams.q,
     pageNumber: searchParams?.page ? +searchParams.page : 1,
-    pageSize: 25
+    pageSize: 10,
   });
 
   return (
     <section>
       <h1 className="head-text mb-10 ">Tìm kiếm</h1>
-      <SearchBar routeType ='search'/>
+      <SearchBar routeType="search" />
 
       {/* list user  */}
       <div className="mt-14 flex flex-col gap-9">
@@ -44,10 +48,10 @@ const page = async ({searchParams} : {searchParams : {[key: string]: string | un
         )}
       </div>
       <Pagination
-      path='search'
-      pageNumber={searchParams?.page ? +searchParams.page : 1}
-      isNext={allUser.isNext}
-    />
+        path="search"
+        pageNumber={searchParams?.page ? +searchParams.page : 1}
+        isNext={allUser.isNext}
+      />
     </section>
   );
 };

@@ -65,12 +65,11 @@ export async function fetchCommunityDetails(communityId: string) {
   }
 }
 
-export async function fetchCommunityPosts(communityId: string) {
+export async function fetchCommunityPosts(id: string) {
   try {
-    await connectToDB();
-    const communityThreads = await Community.findOne({
-      id: communityId,
-    }).populate({
+    connectToDB();
+
+    const communityPosts = await Community.findById(id).populate({
       path: "threads",
       model: Thread,
       populate: [
@@ -85,15 +84,17 @@ export async function fetchCommunityPosts(communityId: string) {
           populate: {
             path: "author",
             model: User,
-            select: "name image id",
+            select: "image _id", // Select the "name" and "_id" fields from the "User" model
           },
         },
       ],
     });
 
-    return communityThreads;
+    return communityPosts;
   } catch (error) {
-    throw new Error("fail to fetch the Threads into Community");
+    // Handle any errors
+    console.error("Error fetching community posts:", error);
+    throw error;
   }
 }
 
