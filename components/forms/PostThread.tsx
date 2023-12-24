@@ -96,6 +96,8 @@ const PostThread: React.FC<PostThreadProps> = ({ userId }) => {
     }
   };
 
+  const isLoading = form.formState.isSubmitting
+
   return (
     <Form {...form}>
       <form
@@ -159,7 +161,7 @@ const PostThread: React.FC<PostThreadProps> = ({ userId }) => {
           )}
         />
 
-        <Button type="submit" className="bg-primary-500">
+        <Button type="submit" disabled={isLoading} className="bg-primary-500">
           Tạo Content
         </Button>
       </form>

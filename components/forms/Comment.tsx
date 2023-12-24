@@ -54,6 +54,8 @@ const Comment: React.FC<CommentProps> = ({
     form.reset();
   };
 
+  const isLoading = form.formState.isSubmitting
+
   return (
     <Form {...form}>
       <form className="comment-form" onSubmit={form.handleSubmit(onSubmit)}>
@@ -83,7 +85,7 @@ const Comment: React.FC<CommentProps> = ({
           )}
         />
 
-        <Button type="submit" className="comment-form_btn ">
+        <Button type="submit" disabled={isLoading} className="comment-form_btn ">
           Reply
         </Button>
       </form>

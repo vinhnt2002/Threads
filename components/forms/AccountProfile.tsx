@@ -106,6 +106,8 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
     }
   };
 
+  const isLoading = form.formState.isSubmitting
+
   return (
     <Form {...form}>
       <form
@@ -210,7 +212,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
           )}
         />
 
-        <Button type="submit" className="bg-primary-500">
+        <Button type="submit" disabled={isLoading} className="bg-primary-500">
           {btnTitle}
         </Button>
       </form>
